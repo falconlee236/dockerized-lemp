@@ -1,0 +1,4 @@
+# Version에 따라서 compose 문법이 다름
+version: '3'
+
+
