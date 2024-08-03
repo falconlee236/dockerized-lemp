@@ -1,4 +1,19 @@
 # Version에 따라서 compose 문법이 다름
 version: '3'
 
+volumes: # 컨테이너 별로 volume이 있지만 이는 컨테이너가 꺼지면 사라지기 때문에 도커 볼륨이 필요
+  mariadb-volume:
+    name: mariadb-volume
+    driver: local # host의 파일 시스템 사용
+    driver_opts: 
+      type: none # 단순히 host dir를 바인드 마운트
+      device: ./sangylee/data/mariadb # host의 dir path
+      o: bind # host 시스템의 dir이나 file을 컨테이너에 연결하는 방식 -> bind mount 방식
 
+networks:
+  inception: # network name
+    driver: bridge # default = bridge
+    ipam: # ip address management
+      driver: default
+      config: # 127.31.0.0 ~ 127.31.255.255
+        - subnet: 127.31.0.0/16
