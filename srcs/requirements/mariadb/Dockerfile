@@ -1,13 +1,13 @@
 FROM debian:bullseye
 
-# 앞으로 .은 /etc/mysql
-WORKDIR /etc/mysql
-# root로 복사
-COPY ./tools/entrypoint.sh /entrypoint.sh
+RUN apt-get update -y && apt-get upgrade -y && apt-get install -y mariadb-server tini
 
-RUN chmod +x /entrypoint.sh
+RUN sed -i "s/127.0.0.1/0.0.0.0/g" /etc/mysql/mariadb.conf.d/50-server.cnf
 
-ENTRYPOINT [ "/entrypoint.sh" ]
+COPY ./tools/entrypoint.sh /
 
-# mysql demon 실행
-CMD [ "mysqld" ]
+RUN chmod +x ./entrypoint.sh
+
+ENTRYPOINT ["/usr/bin/tini", "--"]
+
+CMD ["/entrypoint.sh"]

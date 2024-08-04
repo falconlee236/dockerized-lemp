@@ -7,13 +7,32 @@ volumes: # 컨테이너 별로 volume이 있지만 이는 컨테이너가 꺼지
     driver: local # host의 파일 시스템 사용
     driver_opts: 
       type: none # 단순히 host dir를 바인드 마운트
-      device: ./sangylee/data/mariadb # host의 dir path
+      device: /home/sangylee/data/mariadb # host의 dir path
       o: bind # host 시스템의 dir이나 file을 컨테이너에 연결하는 방식 -> bind mount 방식
+  wordpress-volume:
+    name: wordpress-volume
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/sangylee/data/wordpress
+      o: bind
+
+services:
+  mariadb:
+    image: mariadb
+    container_name: mariadb
+    env_file:
+      - .env
+    volumes:
+      - mariadb-volume:/var/lib/mysql
+    build: ./requirements/mariadb
+    networks:
+      - inception
+    expose:
+      - "3306"
+    tty: true
+    restart: always
 
 networks:
   inception: # network name
     driver: bridge # default = bridge
-    ipam: # ip address management
-      driver: default
-      config: # 127.31.0.0 ~ 127.31.255.255
-        - subnet: 127.31.0.0/16
