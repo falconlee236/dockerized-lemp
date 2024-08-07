@@ -1,6 +1,5 @@
 FROM debian:bullseye
 
-WORKDIR /var/www/html
 
 RUN apt-get -y -qq update
 RUN apt-get -y -qq upgrade
@@ -19,5 +18,7 @@ RUN sed -i 's/\/run\/php\/php7.4-fpm.sock/0.0.0.0:9000/g' /etc/php/7.4/fpm/pool.
 
 COPY ./tools/entrypoint.sh /
 RUN chmod +x ./entrypoint.sh
+
+WORKDIR /var/www/html
 
 ENTRYPOINT ["/usr/bin/tini", "--", "/entrypoint.sh"]

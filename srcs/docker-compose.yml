@@ -33,6 +33,37 @@ services:
     tty: true
     restart: always
 
+  wordpress:
+    image: wordpress
+    container_name: wordpress
+    env_file:
+      - .env
+    volumes:
+      - wordpress-volume:/var/www/html
+    build: ./requirements/wordpress
+    networks:
+      - inception
+    expose:
+      - '9000'
+    tty: true
+    restart: always
+
+  nginx:
+    image: nginx
+    container_name: nginx
+    env_file:
+      - .env
+    volumes:
+      - wordpress-volume:/var/www/html
+    build: ./requirements/nginx
+    networks:
+      - inception
+    ports:
+      - '443:443'
+    tty: true
+    restart: always
+      
+
 networks:
   inception: # network name
     driver: bridge # default = bridge
