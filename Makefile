@@ -1,6 +1,5 @@
 COMPOSE_FILE = ./srcs/docker-compose.yml
-# IMAGES = nginx mariadb wordpress
-IMAGES = mariadb
+IMAGES = nginx mariadb wordpress
 VOLUMES = mariadb-volume wordpress-volume
 DATA = /home/sangylee/data
 
